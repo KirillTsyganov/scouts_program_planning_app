@@ -4,10 +4,10 @@
       <div class="card-header">
         <h2 class="program-title">{{ program.title }}</h2>
         <span class="program-date">{{ formattedDate }}</span>
+        <p><strong>Patrol:</strong> {{ program.patrol }}</p>
       </div>
       <div class="program-details">
-        <p><strong>Unit:</strong> {{ program.unit }}</p>
-        <p><strong>Patrol:</strong> {{ program.patrol }}</p>
+        <p>{{ program.description }}</p>
       </div>
     </div>
 
@@ -17,7 +17,7 @@
         aria-label="Delete Program"
         @click="$emit('delete', program.id)"
       >
-        <span class="icon-text">Delete</span>
+        &#128465;
       </button>
     </div>
   </div>
@@ -29,17 +29,14 @@ const props = defineProps({
   program: {
     type: Object,
     required: true,
-    // Expected structure: { id: 1, theme: '...', unit: '...', date: 'YYYY-MM-DD', patrol: '...' }
   },
 });
 
 defineEmits(['edit', 'delete']);
 
-// Format the date for a more user-friendly display
 const formattedDate = computed(() => {
   if (!props.program.date) return 'TBA';
 
-  // Simple date formatting for display
   const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
   try {
     return new Date(props.program.date).toLocaleDateString(
@@ -53,6 +50,7 @@ const formattedDate = computed(() => {
 </script>
 <style scoped>
 .program-card {
+  position: relative;
   display: flex;
   justify-content: space-between;
   background-color: #f9f9f9;
@@ -65,7 +63,7 @@ const formattedDate = computed(() => {
 .card-content {
   /* Takes up most of the space and is the clickable area for editing */
   flex-grow: 1;
-  padding: 15px;
+  padding: 15px 15px 40px 15px; /* Add padding to the bottom to avoid overlap */
   cursor: pointer;
 }
 
@@ -100,43 +98,32 @@ const formattedDate = computed(() => {
 
 /* --- Actions/Buttons Section --- */
 .card-actions {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* Fixed width for the button area */
-  width: 70px;
-  flex-shrink: 0;
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 .action-btn {
-  height: 100%; /* Fill the height of the card */
+  background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: bold;
+  font-size: 1.1rem;
   transition: background-color 0.2s ease;
+  padding: 5px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: right;
+  justify-content: right;
 }
 
 .delete-btn {
-  background-color: #d9534f; /* Red for danger/delete */
-  color: white;
+  color: #a0a0a0;
 }
 
 .delete-btn:hover {
-  background-color: #c9302c;
+  background-color: #e0e0e0;
+  color: #c9302c;
 }
-
-/* Hide text and just show icon on very small screens, 
-   but since we are using vanilla CSS, we'll keep the text for clarity. */
-/* If you want icons, replace the 'icon-text' span content with an SVG/Image. */
-/* Example Media Query for icon-only button (if we used an icon):
-@media (max-width: 400px) {
-  .delete-btn {
-    width: 50px;
-  }
-  .icon-text {
-    display: none;
-  }
-}
-*/
 </style>

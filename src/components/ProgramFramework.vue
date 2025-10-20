@@ -3,6 +3,17 @@
     <div class="framework-header">
       <div class="meta-row">
         <div class="form-group">
+          <label for="program-title">Title</label>
+          <input
+            id="program-title"
+            class="title-input"
+            type="text"
+            :value="programData.title"
+            placeholder="e.g., Campfire Cooking Night"
+            @input="update('title', $event.target.value)"
+          />
+        </div>
+        <div class="form-group">
           <label for="date">Date</label>
           <input
             id="date"
@@ -22,29 +33,18 @@
             @input="update('patrol', $event.target.value)"
           />
         </div>
-
-        <div class="form-group title-group">
-          <label for="program-title">Title</label>
-          <input
-            id="program-title"
-            class="title-input"
-            type="text"
-            :value="programData.title"
-            placeholder="e.g., Campfire Cooking Night"
-            @input="update('title', $event.target.value)"
-          />
-        </div>
-
-        <div class="form-group description-group">
+      </div>
+      <div class="meta-row">
+        <div class="form-group full-width">
           <label for="description">Description</label>
-          <input
+          <textarea
             id="description"
             class="description-input"
-            type="text"
             :value="programData.description"
             placeholder="A brief summary of the night"
+            rows="3"
             @input="update('description', $event.target.value)"
-          />
+          ></textarea>
         </div>
       </div>
     </div>
@@ -83,12 +83,22 @@ const update = (key, value) => {
 
 .meta-row {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 20px;
 }
 
-.meta-row .form-group {
-  flex-basis: 48%;
+@media (min-width: 768px) {
+  .meta-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .form-group {
+    flex: 1 1 30%; /* Allow items to grow and shrink */
+  }
+  .full-width {
+    flex-basis: 100%;
+  }
 }
 
 .form-group {
@@ -104,7 +114,8 @@ label {
 }
 
 input[type='text'],
-input[type='date'] {
+input[type='date'],
+textarea {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;

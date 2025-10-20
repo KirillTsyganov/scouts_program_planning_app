@@ -3,8 +3,6 @@
     <div class="activity-list-header">
       <div class="time-col">Time</div>
       <div class="activity-col">Activity</div>
-      <div class="equipment-col">Equipment</div>
-      <div class="milestone-col">Milestone Task</div>
       <div class="actions-col"></div>
     </div>
 
