@@ -2,7 +2,7 @@
   <div class="programs-container">
     <h1>Cub Scout Program Planner</h1>
     <div class="header-actions">
-      <button @click="addNewProgram" class="add-btn">+ Add New Program</button>
+      <button class="add-btn" @click="addNewProgram">+ Add New Program</button>
     </div>
     <div v-if="programs.length" class="program-list">
       <ProgramCard

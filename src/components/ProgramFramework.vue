@@ -18,8 +18,8 @@
             id="patrol"
             type="text"
             :value="programData.patrol"
-            @input="update('patrol', $event.target.value)"
             placeholder="e.g., Lions"
+            @input="update('patrol', $event.target.value)"
           />
         </div>
 
@@ -30,8 +30,8 @@
             class="title-input"
             type="text"
             :value="programData.title"
-            @input="update('title', $event.target.value)"
             placeholder="e.g., Campfire Cooking Night"
+            @input="update('title', $event.target.value)"
           />
         </div>
 
@@ -42,8 +42,8 @@
             class="description-input"
             type="text"
             :value="programData.description"
-            @input="update('description', $event.target.value)"
             placeholder="A brief summary of the night"
+            @input="update('description', $event.target.value)"
           />
         </div>
       </div>

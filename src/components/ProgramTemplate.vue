@@ -1,10 +1,10 @@
 <template>
   <div class="program-template-container">
     <div class="template-header">
-      <button @click="goBack" class="back-btn">← Back to Programs</button>
+      <button class="back-btn" @click="goBack">← Back to Programs</button>
       <div class="actions">
-        <button @click="saveProgram" class="save-btn">Save</button>
-        <button @click="printProgram" class="print-btn">Print</button>
+        <button class="save-btn" @click="saveProgram">Save</button>
+        <button class="print-btn" @click="printProgram">Print</button>
       </div>
     </div>
     <main class="program-editor">

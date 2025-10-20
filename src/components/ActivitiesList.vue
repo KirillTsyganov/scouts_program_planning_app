@@ -20,7 +20,7 @@
     </div>
 
     <div class="add-activity-container">
-      <button @click="addActivity" class="add-activity-btn">
+      <button class="add-activity-btn" @click="addActivity">
         + Add Activity
       </button>
     </div>

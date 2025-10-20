@@ -1,6 +1,6 @@
 <template>
   <div class="program-card">
-    <div @click="$emit('edit', program.id)" class="card-content">
+    <div class="card-content" @click="$emit('edit', program.id)">
       <div class="card-header">
         <h2 class="program-title">{{ program.title }}</h2>
         <span class="program-date">{{ formattedDate }}</span>
@@ -13,9 +13,9 @@
 
     <div class="card-actions">
       <button
-        @click="$emit('delete', program.id)"
         class="action-btn delete-btn"
         aria-label="Delete Program"
+        @click="$emit('delete', program.id)"
       >
         <span class="icon-text">Delete</span>
       </button>

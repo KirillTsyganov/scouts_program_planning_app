@@ -15,9 +15,9 @@
           :id="`duration-${activity.id}`"
           type="text"
           :value="activity.duration"
-          @input="updateActivity('duration', $event.target.value)"
           :placeholder="isFixedRow ? '' : 'e.g., 15 mins'"
           :readonly="isFixedRow"
+          @input="updateActivity('duration', $event.target.value)"
         />
       </div>
 
@@ -28,10 +28,10 @@
         <textarea
           :id="`details-${activity.id}`"
           :value="activity.details"
-          @input="updateActivity('details', $event.target.value)"
           placeholder="What will happen?"
           :readonly="isFixedRow"
           rows="1"
+          @input="updateActivity('details', $event.target.value)"
         ></textarea>
       </div>
 
@@ -73,10 +73,10 @@
 
     <div class="actions-col">
       <button
-        @click="$emit('remove')"
         class="remove-btn"
         :disabled="isFixedRow"
         aria-label="Remove Activity"
+        @click="$emit('remove')"
       >
         &times;
       </button>
