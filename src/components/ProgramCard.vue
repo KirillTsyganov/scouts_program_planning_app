@@ -17,7 +17,7 @@
         aria-label="Delete Program"
         @click="$emit('delete', program.id)"
       >
-        &#128465;
+        &times;
       </button>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="program-template-container">
     <div class="template-header">
-      <button class="back-btn" @click="goBack">← Back to Programs</button>
+      <button class="back-btn" @click="saveProgram">← Back to Programs</button>
       <div class="actions">
         <button class="save-btn" @click="saveProgram">Save</button>
         <button class="print-btn" @click="printProgram">Print</button>
@@ -30,7 +30,6 @@ const route = useRoute();
 const createNewProgramData = () => ({
   title: '',
   description: '',
-  unit: '1st Upper Gum Tree CUB SCOUT UNIT', // [cite: 9]
   date: new Date().toISOString().substring(0, 10),
   patrol: '',
   challengeAreas: {
@@ -99,11 +98,11 @@ onMounted(() => {
   }
 });
 
-const goBack = () => {
-  if (confirm('Are you sure you want to exit without saving?')) {
-    router.push('/programs');
-  }
-};
+// const goBack = () => {
+//   if (confirm('Are you sure you want to exit without saving?')) {
+//     router.push('/programs');
+//   }
+// };
 
 const saveProgram = () => {
   const savedPrograms = JSON.parse(
@@ -123,7 +122,7 @@ const saveProgram = () => {
   }
 
   localStorage.setItem('scout-programs', JSON.stringify(savedPrograms));
-  alert('Program Saved!');
+  // alert('Program Saved!');
   router.push('/programs');
 };
 

@@ -51,7 +51,10 @@
       </div>
     </div>
 
-    <div v-if="activity.tag === 'main'" class="tagging-section">
+    <div
+      v-if="!['opening', 'closing', 'celebration'].includes(activity.tag)"
+      class="tagging-section"
+    >
       <div class="tag-group challenge-areas">
         <span class="tag-title">Challenge Areas :</span>
         <div class="tag-checkboxes">
@@ -166,6 +169,10 @@ const updateChallengeArea = (key, value) => {
   border-top: 1px solid #e0e0e0;
 }
 
+.tag-group {
+  display: flex;
+  align-items: center;
+}
 .tag-title {
   font-size: 0.9rem;
   font-weight: bold;
