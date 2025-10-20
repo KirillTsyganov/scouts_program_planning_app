@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="programs-container">
     <h1>Cub Scout Program Planner</h1>

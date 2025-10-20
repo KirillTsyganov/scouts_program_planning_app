@@ -33,7 +33,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['edit', 'delete']);
+defineEmits(['edit', 'delete']);
 
 // Format the date for a more user-friendly display
 const formattedDate = computed(() => {
@@ -46,7 +46,7 @@ const formattedDate = computed(() => {
       'en-AU',
       dateOptions,
     );
-  } catch (e) {
+  } catch {
     return props.program.date; // Fallback
   }
 });

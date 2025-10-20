@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Programs from './components/Programs.vue';
+import ProgramsList from './components/ProgramsList.vue';
 import ProgramTemplate from './components/ProgramTemplate.vue';
 
 const routes = [
@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/programs',
     name: 'Programs',
-    component: Programs,
+    component: ProgramsList,
   },
   {
     path: '/program/:id',
