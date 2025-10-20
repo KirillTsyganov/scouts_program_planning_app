@@ -5,7 +5,7 @@ import ProgramTemplate from './components/ProgramTemplate.vue';
 const routes = [
   {
     path: '/',
-    redirect: '/programs'
+    redirect: '/programs',
   },
   {
     path: '/programs',
