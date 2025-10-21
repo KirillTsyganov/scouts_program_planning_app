@@ -1,5 +1,11 @@
-# Vue 3 + Vite
+# Scouts Program Planning App
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is a side project, playing around, trying to come up with a mobile friendly and modern app to create a weekly scouts programs
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## References:
+
+- https://scoutsvictoria.com.au/age-sections-adults/leader-resources/campaign-afci-understanding-our-program/program-planning/
+- https://scoutsvictoria.com.au/age-sections-adults/our-program/your-scouting-journey/fundamentals-of-scouting/scout-method/
+- https://scoutsvictoria.com.au/age-sections-adults/our-program/your-scouting-journey/programming/challenge-areas/
+- https://scoutsvictoria.com.au/age-sections-adults/cub-scouts/cub-scout-program/program-essentials-milestones/
+- https://scoutsvictoria.com.au/age-sections-adults/our-program/your-scouting-journey/fundamentals-of-scouting/purpose-spices/
