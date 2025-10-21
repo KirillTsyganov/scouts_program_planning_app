@@ -7,7 +7,7 @@
     </div>
 
     <div class="activity-rows">
-      <ActivityRow
+      <ActivityFramework
         v-for="(activity, index) in activities"
         :key="activity.id || index"
         :activity="activity"
@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import ActivityRow from './NewActivity.vue';
+import ActivityFramework from './ActivityFramework.vue';
 
 const props = defineProps({
   activities: {

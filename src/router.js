@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import ProgramsList from './components/ProgramsList.vue';
-import ProgramTemplate from './components/ProgramTemplate.vue';
+import ProgramEditor from './components/ProgramEditor.vue';
 
 const routes = [
   {
@@ -14,8 +14,8 @@ const routes = [
   },
   {
     path: '/program/:id',
-    name: 'ProgramTemplate',
-    component: ProgramTemplate,
+    name: 'ProgramEditor',
+    component: ProgramEditor,
     props: true, // This allows the :id param to be passed as a prop to the component
   },
 ];

@@ -39,11 +39,11 @@ onMounted(() => {
 });
 
 const addNewProgram = async () => {
-  router.push({ name: 'ProgramTemplate', params: { id: 'new' } });
+  router.push({ name: 'ProgramEditor', params: { id: 'new' } });
 };
 
 const editProgram = (id) => {
-  router.push({ name: 'ProgramTemplate', params: { id: id } });
+  router.push({ name: 'ProgramEditor', params: { id: id } });
 };
 
 const deleteProgram = (id) => {
@@ -58,7 +58,7 @@ const deleteProgram = (id) => {
 <style scoped>
 .programs-container {
   padding: 16px;
-  max-width: 600px; /* Constrain width for readability on desktop */
+  max-width: 900px; /* Constrain width for readability on desktop */
   margin: 0 auto;
 }
 
