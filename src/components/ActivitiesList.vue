@@ -3,6 +3,7 @@
     <div class="activity-list-header">
       <div class="time-col">Time</div>
       <div class="activity-col">Activity</div>
+      <div class="activity-col">Equipment</div>
       <div class="tag-col">Tag</div>
       <div class="actions-col"></div>
     </div>
@@ -42,6 +43,7 @@ const createNewActivity = () => ({
   id: Date.now() + Math.random(),
   duration: '',
   details: '',
+  equipment: '',
   tag: 'main',
   challengeAreas: {
     Community: false,
@@ -100,7 +102,7 @@ const updateActivity = (index, updatedActivity) => {
 @media (min-width: 768px) {
   .activity-list-header {
     display: grid;
-    grid-template-columns: 100px 1fr 120px 40px;
+    grid-template-columns: 100px 1fr 1fr 120px 40px;
     gap: 10px;
     padding: 8px 5px;
   }

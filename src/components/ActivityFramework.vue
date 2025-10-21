@@ -39,6 +39,20 @@
         ></textarea>
       </div>
 
+      <div class="activity-col">
+        <label :for="`equipment-${activity.id}`" class="mobile-label"
+          >Equipment</label
+        >
+        <textarea
+          :id="`equipment-${activity.id}`"
+          :value="activity.equipment"
+          placeholder="What equipment will be used?"
+          :readonly="isFixedRow"
+          rows="1"
+          @input="updateActivity('equipment', $event.target.value)"
+        ></textarea>
+      </div>
+
       <div class="tag-col">
         <label :for="`tag-${activity.id}`" class="mobile-label">Tag</label>
         <select
@@ -264,7 +278,7 @@ const updateChallengeArea = (key, value) => {
   }
   .main-content-grid {
     display: grid;
-    grid-template-columns: 100px 1fr 120px; /* This can be simplified if tag-col is not needed on all rows */
+    grid-template-columns: 100px 1fr 1fr 120px;
     width: calc(100% - 40px); /* Leave space for remove button */
   }
   .time-col,

@@ -39,6 +39,7 @@ const createNewProgramData = () => ({
       id: 'opening',
       duration: '10 mins',
       details: 'Opening Parade',
+      equipment: '',
       tag: 'opening',
       challengeAreas: {
         Community: false,
@@ -51,6 +52,7 @@ const createNewProgramData = () => ({
       id: 'closing',
       duration: '10 mins',
       details: 'Closing Parade & Review',
+      equipment: '',
       tag: 'closing',
       challengeAreas: {
         Community: false,
@@ -154,14 +156,24 @@ const printProgram = () => {
   doc.text(descriptionLines, 14, 54);
 
   // Prepare data for the activities table
-  const tableColumn = ['Duration', 'Activity Details', 'Challenge Areas'];
+  const tableColumn = [
+    'Duration',
+    'Activity Details',
+    'Equipment',
+    'Challenge Areas',
+  ];
   const tableRows = program.activities.map((activity) => {
     const selectedChallenges = Object.entries(activity.challengeAreas)
       .filter(([, isActive]) => isActive)
       .map(([area]) => area)
       .join(', ');
 
-    return [activity.duration, activity.details, selectedChallenges || '-'];
+    return [
+      activity.duration,
+      activity.details,
+      activity.equipment,
+      selectedChallenges || '-',
+    ];
   });
 
   // Add table using jspdf-autotable
@@ -233,7 +245,7 @@ const printProgram = () => {
 
 .program-editor {
   padding: 16px;
-  max-width: 800px;
+  max-width: 62.5rem; /* 1000px at 16px base font size */
   margin: 0 auto;
 }
 
