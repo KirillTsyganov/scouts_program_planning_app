@@ -3,6 +3,7 @@
     <div class="activity-list-header">
       <div class="time-col">Time</div>
       <div class="activity-col">Activity</div>
+      <div class="tag-col">Tag</div>
       <div class="actions-col"></div>
     </div>
 
@@ -38,30 +39,22 @@ const props = defineProps({
 const emit = defineEmits(['update:activities']);
 
 const createNewActivity = () => ({
-  id: Date.now() + Math.random(), // Simple unique ID
-  time: '',
-  activity: '',
-  equipment: '',
-  milestoneTask: '',
-  youthLeader: 'Youth',
+  id: Date.now() + Math.random(),
+  duration: '',
+  details: '',
+  tag: 'main',
   challengeAreas: {
     Community: false,
     Outdoors: false,
     Creative: false,
     'Personal Growth': false,
   },
-  spices: {
-    SOCIAL: false,
-    PHYSICAL: false,
-    INTELLECTUAL: false,
-    CHARACTER: false,
-    EMOTIONAL: false,
-    SPIRITUAL: false,
-  },
 });
 
 const addActivity = () => {
   const newActivities = [...props.activities];
+  console.log('Adding new activity');
+  console.log(newActivities);
   // Insert before the last item (CLOSING)
   newActivities.splice(newActivities.length - 1, 0, createNewActivity());
   emit('update:activities', newActivities);
@@ -107,7 +100,7 @@ const updateActivity = (index, updatedActivity) => {
 @media (min-width: 768px) {
   .activity-list-header {
     display: grid;
-    grid-template-columns: 80px 3fr 1.5fr 1.5fr 40px;
+    grid-template-columns: 100px 1fr 120px 40px;
     gap: 10px;
     padding: 8px 5px;
   }

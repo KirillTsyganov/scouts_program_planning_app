@@ -4,6 +4,7 @@
       <button class="back-btn" @click="saveProgram">← Back to Programs</button>
       <div class="actions">
         <button class="save-btn" @click="saveProgram">Save</button>
+        <button class="print-btn" @click="printProgram">Print</button>
       </div>
     </div>
     <main class="program-editor">
@@ -21,6 +22,8 @@ import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import ProgramFramework from './ProgramFramework.vue';
 import ActivityList from './ActivitiesList.vue';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const router = useRouter();
 const route = useRoute();
@@ -120,9 +123,52 @@ const saveProgram = () => {
 };
 
 const printProgram = () => {
-  // This triggers the browser's native print dialogue.
-  // The mobile-friendly layout will be overridden by the @media print CSS.
-  window.print();
+  const program = currentProgram.value;
+  // Initialize jsPDF for A4 portrait
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  // Set document properties
+  doc.setProperties({
+    title: `${program.title} - Program Plan`,
+  });
+
+  // Add Header Text
+  doc.setFontSize(20);
+  doc.text(program.title, 14, 22);
+
+  doc.setFontSize(11);
+  doc.text(`Date: ${program.date}`, 14, 32);
+  doc.text(`Patrol: ${program.patrol || 'N/A'}`, 14, 38);
+
+  // Add Description (with line wrapping)
+  doc.setFontSize(12);
+  doc.text('Description:', 14, 48);
+  const descriptionLines = doc.splitTextToSize(
+    program.description || 'No description.',
+    180,
+  );
+  doc.text(descriptionLines, 14, 54);
+
+  // Prepare data for the activities table
+  const tableColumn = ['Duration', 'Activity Details', 'Challenge Areas'];
+  const tableRows = program.activities.map((activity) => {
+    const selectedChallenges = Object.entries(activity.challengeAreas)
+      .filter(([, isActive]) => isActive)
+      .map(([area]) => area)
+      .join(', ');
+
+    return [activity.duration, activity.details, selectedChallenges || '-'];
+  });
+
+  // Add table using jspdf-autotable
+  autoTable(doc, { head: [tableColumn], body: tableRows, startY: 70 });
+
+  // Save the PDF
+  doc.save(`${program.title.replace(/\s+/g, '_') || 'program'}.pdf`);
 };
 </script>
 

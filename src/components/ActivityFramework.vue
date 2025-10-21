@@ -11,14 +11,18 @@
         <label :for="`duration-${activity.id}`" class="mobile-label"
           >Duration</label
         >
-        <input
+        <select
           :id="`duration-${activity.id}`"
-          type="text"
           :value="activity.duration"
-          :placeholder="isFixedRow ? '' : 'e.g., 15 mins'"
-          :readonly="isFixedRow"
-          @input="updateActivity('duration', $event.target.value)"
-        />
+          @change="updateActivity('duration', $event.target.value)"
+        >
+          <option value="" :disabled="activity.duration !== ''">
+            Select duration
+          </option>
+          <option v-for="time in timeOptions" :key="time" :value="time">
+            {{ time }}
+          </option>
+        </select>
       </div>
 
       <div class="activity-col">
@@ -50,30 +54,6 @@
         </select>
       </div>
     </div>
-
-    <div
-      v-if="!['opening', 'closing', 'celebration'].includes(activity.tag)"
-      class="tagging-section"
-    >
-      <div class="tag-group challenge-areas">
-        <span class="tag-title">Challenge Areas :</span>
-        <div class="tag-checkboxes">
-          <label
-            v-for="(value, key) in activity.challengeAreas"
-            :key="key"
-            :class="{ checked: value }"
-          >
-            <input
-              type="checkbox"
-              :checked="value"
-              @change="updateChallengeArea(key, $event.target.checked)"
-            />
-            {{ key }}
-          </label>
-        </div>
-      </div>
-    </div>
-
     <div class="actions-col">
       <button
         class="remove-btn"
@@ -84,10 +64,53 @@
         &times;
       </button>
     </div>
+    <div
+      v-if="
+        !isFixedRow &&
+        !['opening', 'closing', 'celebration'].includes(activity.tag)
+      "
+      class="tagging-section"
+    >
+      <span class="tag-title">Challenge Areas:</span>
+      <div class="tag-icons">
+        <img
+          v-for="(isActive, area) in activity.challengeAreas"
+          :key="area"
+          :src="challengeAreaLogos[area]"
+          :alt="area"
+          :title="area"
+          class="tag-icon"
+          :class="{ active: isActive }"
+          @click="updateChallengeArea(area, !isActive)"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
+import communityLogo from '@/assets/community.png';
+import outdoorsLogo from '@/assets/outdoors.png';
+import creativeLogo from '@/assets/creative.png';
+import personalGrowthLogo from '@/assets/personal-growth.png';
+
+const challengeAreaLogos = {
+  Community: communityLogo,
+  Outdoors: outdoorsLogo,
+  Creative: creativeLogo,
+  'Personal Growth': personalGrowthLogo,
+};
+
+const timeOptions = computed(() => {
+  const options = [];
+  for (let i = 5; i <= 120; i += 5) {
+    options.push(`${i} mins`);
+  }
+  return options;
+});
+
 const props = defineProps({
   activity: {
     type: Object,
@@ -146,7 +169,8 @@ const updateChallengeArea = (key, value) => {
 }
 
 .activity-row input[type='text'],
-.activity-row textarea {
+.activity-row textarea,
+.activity-row select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -169,46 +193,12 @@ const updateChallengeArea = (key, value) => {
   border-top: 1px solid #e0e0e0;
 }
 
-.tag-group {
-  display: flex;
-  align-items: center;
-}
 .tag-title {
   font-size: 0.9rem;
   font-weight: bold;
   color: #005e3b;
   margin-bottom: 5px;
   display: block;
-}
-
-.challenge-areas {
-  margin-bottom: 15px;
-}
-
-.tag-checkboxes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tag-checkboxes label {
-  display: inline-flex;
-  align-items: center;
-  background-color: #f0f0f0;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.tag-checkboxes label.checked {
-  background-color: #ff9900;
-  color: white;
-  font-weight: bold;
-}
-
-.tag-checkboxes input[type='checkbox'] {
-  display: none;
 }
 
 .tag-col select {
@@ -242,6 +232,25 @@ const updateChallengeArea = (key, value) => {
   cursor: not-allowed;
 }
 
+.tag-icons {
+  display: flex;
+  gap: 12px;
+}
+
+.tag-icon {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 0.2s ease-in-out;
+  border-radius: 50%;
+}
+
+.tag-icon.active {
+  opacity: 1;
+  box-shadow: 0 0 0 2px #ff9900;
+}
+
 @media (min-width: 768px) {
   .activity-row {
     border: 1px solid #ddd;
@@ -255,7 +264,7 @@ const updateChallengeArea = (key, value) => {
   }
   .main-content-grid {
     display: grid;
-    grid-template-columns: 100px 1fr 120px;
+    grid-template-columns: 100px 1fr 120px; /* This can be simplified if tag-col is not needed on all rows */
     width: calc(100% - 40px); /* Leave space for remove button */
   }
   .time-col,
@@ -266,19 +275,17 @@ const updateChallengeArea = (key, value) => {
     align-items: center;
     border-right: 1px solid #eee;
   }
-  .tag-col {
-    border-right: none;
-  }
   .actions-col {
-    border-right: none;
+    border-right: none; /* This was a mistake in previous version, should be tag-col */
   }
   .time-col {
     padding-left: 15px;
   }
-  .activity-row input[type='text'] {
+  .activity-row select {
     border: none;
     padding: 0;
     background: none;
+    width: 100%;
   }
   .tagging-section {
     grid-column: 1 / span 3;
@@ -292,10 +299,6 @@ const updateChallengeArea = (key, value) => {
   .tag-title {
     margin-bottom: 0;
     margin-right: 10px;
-  }
-  .tag-checkboxes label {
-    padding: 2px 6px;
-    font-size: 0.75rem;
   }
   .actions-col {
     position: static;
