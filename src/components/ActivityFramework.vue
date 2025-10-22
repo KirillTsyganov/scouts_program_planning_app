@@ -267,64 +267,66 @@ const updateChallengeArea = (key, value) => {
 }
 
 /* Apply desktop grid layout ONLY when not inside the ActivityEditor modal */
-@media (min-width: 768px) and (not: has(.activity-editor-container)) {
-  .activity-row {
-    border: 1px solid #ddd;
-    border-radius: 0;
-    padding: 0;
-    margin-bottom: 0;
-    align-items: stretch;
-  }
-  .mobile-label {
-    display: none;
-  }
-  .main-content-grid {
-    display: grid;
-    grid-template-columns: 100px 1fr 1fr 120px;
-    width: calc(100% - 40px); /* Leave space for remove button */
-  }
-  .time-col,
-  .activity-col,
-  .tag-col {
-    padding: 8px 5px;
-    display: flex;
-    align-items: center;
-    border-right: 1px solid #eee;
-  }
-  .actions-col {
-    border-right: none; /* This was a mistake in previous version, should be tag-col */
-  }
-  .time-col {
-    padding-left: 15px;
-  }
-  .activity-row select {
-    border: none;
-    padding: 0;
-    background: none;
-    width: 100%;
-  }
-  .tagging-section {
-    grid-column: 1 / span 3;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px dotted #eee;
-    padding: 5px 15px;
-    margin-top: 0;
-  }
-  .tag-title {
-    margin-bottom: 0;
-    margin-right: 10px;
-  }
-  .actions-col {
-    position: static;
-  }
-  .remove-btn {
-    width: 20px;
-    height: 20px;
-    font-size: 1rem;
-    margin: 0 auto;
-    display: block;
+@media (min-width: 768px) {
+  body:not(:has(.activity-editor-container)) {
+    .activity-row {
+      border: 1px solid #ddd;
+      border-radius: 0;
+      padding: 0;
+      margin-bottom: 0;
+      align-items: stretch;
+    }
+    .mobile-label {
+      display: none;
+    }
+    .main-content-grid {
+      display: grid;
+      grid-template-columns: 100px 1fr 1fr 120px;
+      width: calc(100% - 40px); /* Leave space for remove button */
+    }
+    .time-col,
+    .activity-col,
+    .tag-col {
+      padding: 8px 5px;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid #eee;
+    }
+    .actions-col {
+      border-right: none; /* This was a mistake in previous version, should be tag-col */
+    }
+    .time-col {
+      padding-left: 15px;
+    }
+    .activity-row select {
+      border: none;
+      padding: 0;
+      background: none;
+      width: 100%;
+    }
+    .tagging-section {
+      grid-column: 1 / span 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dotted #eee;
+      padding: 5px 15px;
+      margin-top: 0;
+    }
+    .tag-title {
+      margin-bottom: 0;
+      margin-right: 10px;
+    }
+    .actions-col {
+      position: static;
+    }
+    .remove-btn {
+      width: 20px;
+      height: 20px;
+      font-size: 1rem;
+      margin: 0 auto;
+      display: block;
+    }
   }
 }
 
