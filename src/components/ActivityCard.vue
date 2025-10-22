@@ -3,8 +3,15 @@
     ActivityCard is a component representing a single activity within ProgramEditor
 -->
 <template>
-  <div class="activities-list">
-    <div class="activity-card">
+  <div class="activity-card-wrapper" :class="{ 'is-fixed': isFixedActivity }">
+    <div class="drag-handle" v-if="!isFixedActivity">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path
+          d="M10 19c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 .99.45 1 1zm0-6c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 .99.45 1 1zm0-6c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 .99.45 1 1zm6 12c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 .99.45 1 1zm0-6c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 .99.45 1 1zm0-6c0 .55-.45 1-1 1s-1-.45-1-1 .45-1 1-1 .99.45 1 1z"
+        />
+      </svg>
+    </div>
+    <div class="activity-card" :class="{ 'has-handle': !isFixedActivity }">
       <div class="activity-card-content" @click="$emit('edit', activity.id)">
         <div class="activity-card-header">
           <p>{{ activity.tag }}</p>
@@ -47,6 +54,7 @@
 <script setup>
 // TODO: not using equipment information on the card, I think it'll be too cluttered
 // Need to think of a different way showing that info
+import { computed } from 'vue';
 
 import communityLogo from '@/assets/community.png';
 import outdoorsLogo from '@/assets/outdoors.png';
@@ -66,18 +74,23 @@ const props = defineProps({
     required: true,
   },
 });
+
+const isFixedActivity = computed(() => {
+  return ['opening', 'closing'].includes(props.activity.tag);
+});
 </script>
 
 <style scoped>
-.activities-list {
-  /* This is the root div of ActivityCard.vue */
+.activity-card-wrapper {
   margin-bottom: 10px; /* Add space between each card */
   display: flex; /* To align card and delete button side-by-side */
   align-items: center;
   gap: 5px; /* Space between card content and delete button */
-  border: none; /* Remove previous border/padding from this wrapper */
-  padding: 0;
-  background-color: transparent;
+}
+
+.activity-card-wrapper.is-fixed .activity-card {
+  background-color: #f8f9fa;
+  border-color: #e9ecef;
 }
 
 .activity-card {
@@ -90,6 +103,28 @@ const props = defineProps({
   display: flex; /* Use flexbox for internal layout */
   flex-direction: column; /* Stack header, body */
   min-height: 80px; /* Give it a minimum height */
+}
+.activity-card.has-handle {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  align-self: stretch;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-right: none;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  cursor: grab;
+}
+.drag-handle svg {
+  width: 16px;
+  height: 16px;
+  fill: #888;
 }
 .activity-card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
