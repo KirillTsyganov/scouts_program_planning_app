@@ -63,14 +63,6 @@ const props = defineProps({
   },
 });
 
-// const props = defineProps({
-//   title: String,
-//   description: String,
-//   date: Date,
-//   patrol: String,
-//   activities: Array,
-// });
-
 const emit = defineEmits(['update:programData']);
 
 const update = (key, value) => {

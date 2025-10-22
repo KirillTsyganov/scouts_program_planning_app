@@ -1,18 +1,16 @@
 <!--
  Docs:
-   ActivityEditor is a component for creating or updating an activity. 
-   A new activity should results in an ActivityCard
-   A list of ActivityCards should appears on a ActivitiesList
-   ActivityEditor page has two main child components:
-     - ActivityFramework (for general program details)
+   [MODIFIED]
+   ActivityEditor is a component for creating or updating an activity within a modal.
+   It receives an activity object as a prop and emits events to save or cancel.
+   It uses ActivityFramework as its layout blueprint.
 -->
 <template>
   <div class="activity-editor-container">
     <div class="editor-header">
-      <button class="back-btn" @click="saveActivity">
-        ← Back to Activities
-      </button>
+      <h3>{{ isNewActivity ? 'Add New Activity' : 'Edit Activity' }}</h3>
       <div class="actions">
+        <button class="cancel-btn" @click="cancel">Cancel</button>
         <button class="save-btn" @click="saveActivity">Save</button>
       </div>
     </div>
@@ -26,77 +24,118 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, watch, computed } from 'vue';
 import ActivityFramework from './ActivityFramework.vue';
 
 const props = defineProps({
-  id: {
-    // This is the programId from the route
-    type: String,
-    required: true,
-  },
-  activityId: {
-    type: String,
-    required: true,
+  // The activity object to be edited. Can be null for a new activity.
+  activity: {
+    type: Object,
+    default: null,
   },
 });
 
-const router = useRouter();
+const emit = defineEmits(['save', 'cancel']);
+
+// A local, editable copy of the activity.
 const currentActivity = ref(null);
 
-onMounted(() => {
-  // Data is passed via router's history state to avoid re-fetching
-  // and to decouple the component from localStorage.
-  if (window.history.state.activity) {
-    currentActivity.value = window.history.state.activity;
-  } else {
-    // Fallback if the user navigates directly to this URL
-    console.warn('Activity data not found in router state. Navigating back.');
-    router.push({ name: 'ProgramEditor', params: { id: props.id } });
-  }
+const isNewActivity = computed(
+  () => !props.activity || props.activity.id === 'new',
+);
+
+const createNewActivity = () => ({
+  id: 'new', // A temporary ID
+  duration: '',
+  details: '',
+  equipment: '',
+  tag: 'main',
+  challengeAreas: {
+    Community: false,
+    Outdoors: false,
+    Creative: false,
+    'Personal Growth': false,
+  },
 });
+
+// Watch for changes in the activity prop to update the local state.
+// This allows the same editor instance to be used for adding and then editing.
+watch(
+  () => props.activity,
+  (newActivity) => {
+    if (newActivity) {
+      // Create a deep copy to prevent modifying the original object directly
+      currentActivity.value = JSON.parse(JSON.stringify(newActivity));
+    } else {
+      // If no activity is passed, assume we are creating a new one.
+      currentActivity.value = createNewActivity();
+    }
+  },
+  { immediate: true }, // Run the watcher immediately on component mount
+);
 
 const saveActivity = () => {
   if (!currentActivity.value) return;
 
-  const savedPrograms = JSON.parse(
-    localStorage.getItem('scout-programs') || '[]',
-  );
-  const programIndex = savedPrograms.findIndex((p) => p.id == props.id);
-
-  if (programIndex === -1) {
-    console.error('Program not found during save!');
-    router.push('/programs');
+  // Basic validation
+  if (!currentActivity.value.duration || !currentActivity.value.details) {
+    alert('Please fill in at least Duration and Activity Details.');
     return;
   }
 
-  const program = savedPrograms[programIndex];
-  const activityToSave = { ...currentActivity.value };
+  // Emit the saved activity data to the parent.
+  emit('save', currentActivity.value);
+};
 
-  if (props.activityId === 'new') {
-    // It's a new activity, add it to the program
-    activityToSave.id = Date.now() + Math.random(); // Assign a unique ID
-    // Insert new activities before the closing parade
-    const closingIndex = program.activities.findIndex(
-      (a) => a.tag === 'closing',
-    );
-    if (closingIndex !== -1) {
-      program.activities.splice(closingIndex, 0, activityToSave);
-    } else {
-      program.activities.push(activityToSave);
-    }
-  } else {
-    // It's an existing activity, update it
-    const activityIndex = program.activities.findIndex(
-      (a) => a.id == props.activityId,
-    );
-    if (activityIndex !== -1) {
-      program.activities[activityIndex] = activityToSave;
-    }
-  }
-
-  localStorage.setItem('scout-programs', JSON.stringify(savedPrograms));
-  router.push({ name: 'ProgramEditor', params: { id: props.id } });
+const cancel = () => {
+  // Emit a cancel event to the parent to close the modal.
+  emit('cancel');
 };
 </script>
+
+<style scoped>
+.activity-editor-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  width: 500px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+.editor-header h3 {
+  margin: 0;
+  color: #005e3b;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+}
+.save-btn,
+.cancel-btn {
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+.save-btn {
+  background-color: #005e3b;
+  color: white;
+}
+.cancel-btn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+.activity-editor {
+  margin-top: 10px;
+}
+</style>

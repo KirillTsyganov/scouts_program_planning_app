@@ -10,7 +10,7 @@
 <template>
   <div class="program-template-container">
     <div class="template-header">
-      <button class="back-btn" @click="saveProgram">← Back to Programs</button>
+      <button class="back-btn" @click="goBack">← Back to Programs</button>
       <div class="actions">
         <button class="save-btn" @click="saveProgram">Save</button>
         <button class="print-btn" @click="printProgram">Print</button>
@@ -21,8 +21,21 @@
 
       <hr class="section-divider" />
 
-      <ActivitiesList v-model:activities="currentProgram.activities" />
+      <ActivitiesList
+        v-model:activities="currentProgram.activities"
+        @add-new="handleAddNewActivity"
+        @edit-activity="handleEditActivity"
+      />
     </main>
+
+    <Modal :show="isActivityModalVisible" @close="closeActivityModal">
+      <ActivityEditor
+        v-if="isActivityModalVisible"
+        :activity="activityToEdit"
+        @save="handleSaveActivity"
+        @cancel="closeActivityModal"
+      />
+    </Modal>
   </div>
 </template>
 
@@ -31,6 +44,8 @@ import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import ProgramFramework from './ProgramFramework.vue';
 import ActivitiesList from './ActivitiesList.vue';
+import Modal from './Modal.vue';
+import ActivityEditor from './ActivityEditor.vue';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -38,6 +53,10 @@ const router = useRouter();
 const route = useRoute();
 
 // This object defines the structure for a brand new, empty program.
+
+const isActivityModalVisible = ref(false);
+const activityToEdit = ref(null);
+
 const createNewProgramData = () => ({
   title: '',
   description: '',
@@ -105,11 +124,51 @@ onMounted(() => {
   }
 });
 
-// const goBack = () => {
-//   if (confirm('Are you sure you want to exit without saving?')) {
-//     router.push('/programs');
-//   }
-// };
+const handleAddNewActivity = () => {
+  activityToEdit.value = null; // No existing activity to edit
+  isActivityModalVisible.value = true;
+};
+
+const handleEditActivity = (activity) => {
+  activityToEdit.value = activity;
+  isActivityModalVisible.value = true;
+};
+
+const closeActivityModal = () => {
+  isActivityModalVisible.value = false;
+  activityToEdit.value = null;
+};
+
+const handleSaveActivity = (activityData) => {
+  const program = currentProgram.value;
+
+  if (activityData.id === 'new') {
+    // It's a new activity, add it to the program
+    activityData.id = Date.now() + Math.random(); // Assign a unique ID
+    // Insert new activities before the closing parade
+    const closingIndex = program.activities.findIndex(
+      (a) => a.tag === 'closing',
+    );
+    if (closingIndex !== -1) {
+      program.activities.splice(closingIndex, 0, activityData);
+    } else {
+      program.activities.push(activityData);
+    }
+  } else {
+    // It's an existing activity, update it
+    const activityIndex = program.activities.findIndex(
+      (a) => a.id === activityData.id,
+    );
+    if (activityIndex !== -1) {
+      program.activities[activityIndex] = activityData;
+    }
+  }
+  closeActivityModal();
+};
+
+const goBack = () => {
+  router.push('/programs');
+};
 
 const saveProgram = () => {
   const savedPrograms = JSON.parse(

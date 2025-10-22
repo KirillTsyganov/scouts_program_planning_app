@@ -34,7 +34,7 @@
           :value="activity.details"
           placeholder="What will happen?"
           :readonly="isFixedRow"
-          rows="1"
+          rows="3"
           @input="updateActivity('details', $event.target.value)"
         ></textarea>
       </div>
@@ -48,7 +48,7 @@
           :value="activity.equipment"
           placeholder="What equipment will be used?"
           :readonly="isFixedRow"
-          rows="1"
+          rows="3"
           @input="updateActivity('equipment', $event.target.value)"
         ></textarea>
       </div>
@@ -64,6 +64,7 @@
           <option value="main">Main</option>
           <option value="closing">Closing</option>
           <option value="other">Other</option>
+          <option value="game">Game</option>
           <option value="celebration">Celebration</option>
         </select>
       </div>
@@ -265,7 +266,8 @@ const updateChallengeArea = (key, value) => {
   box-shadow: 0 0 0 2px #ff9900;
 }
 
-@media (min-width: 768px) {
+/* Apply desktop grid layout ONLY when not inside the ActivityEditor modal */
+@media (min-width: 768px) and (not: has(.activity-editor-container)) {
   .activity-row {
     border: 1px solid #ddd;
     border-radius: 0;

@@ -15,14 +15,18 @@
             <p>{{ activity.details }}</p>
           </div>
           <div class="challenge-areas">
-            <div
-              v-for="(selected, area) in activity.challengeAreas"
+            <template
+              v-for="(isSelected, area) in activity.challengeAreas"
               :key="area"
-              v-if="selected"
-              class="challenge-area-badge"
             >
-              {{ area }}
-            </div>
+              <img
+                v-if="isSelected"
+                :src="challengeAreaLogos[area]"
+                :alt="area"
+                :title="area"
+                class="challenge-area-icon"
+              />
+            </template>
           </div>
         </div>
       </div>
@@ -43,6 +47,19 @@
 <script setup>
 // TODO: not using equipment information on the card, I think it'll be too cluttered
 // Need to think of a different way showing that info
+
+import communityLogo from '@/assets/community.png';
+import outdoorsLogo from '@/assets/outdoors.png';
+import creativeLogo from '@/assets/creative.png';
+import personalGrowthLogo from '@/assets/personal-growth.png';
+
+const challengeAreaLogos = {
+  Community: communityLogo,
+  Outdoors: outdoorsLogo,
+  Creative: creativeLogo,
+  'Personal Growth': personalGrowthLogo,
+};
+
 const props = defineProps({
   activity: {
     type: Object,
@@ -53,44 +70,79 @@ const props = defineProps({
 
 <style scoped>
 .activities-list {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 16px;
-  background-color: #fafafa;
+  /* This is the root div of ActivityCard.vue */
+  margin-bottom: 10px; /* Add space between each card */
+  display: flex; /* To align card and delete button side-by-side */
+  align-items: center;
+  gap: 5px; /* Space between card content and delete button */
+  border: none; /* Remove previous border/padding from this wrapper */
+  padding: 0;
+  background-color: transparent;
 }
+
 .activity-card {
+  flex-grow: 1; /* Allow card to take available space */
   border: 1px solid #ddd;
   border-radius: 6px;
-  margin-bottom: 12px;
   background-color: #fff;
   cursor: pointer;
   transition: box-shadow 0.2s;
+  display: flex; /* Use flexbox for internal layout */
+  flex-direction: column; /* Stack header, body */
+  min-height: 80px; /* Give it a minimum height */
 }
 .activity-card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+.activity-card-content {
+  flex-grow: 1; /* Allow content to grow */
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px; /* Reduced padding */
+}
 .activity-card-header {
   display: flex;
   justify-content: space-between;
-  padding: 8px 12px;
-  border-bottom: 1px solid #eee;
-  background-color: #f9f9f9;
+  align-items: baseline; /* Align text baselines */
+  margin-bottom: 5px; /* Space between header and details */
+  font-size: 0.9rem; /* Smaller font for header */
+  color: #555;
 }
 .activity-card-body {
-  padding: 12px;
+  padding: 0; /* Remove body padding, content-padding handles it */
+  flex-grow: 1; /* Allow body to grow */
+  display: flex;
+  flex-direction: column;
+}
+.activity-card-header p {
+  margin: 0; /* Remove default paragraph margins */
+  font-size: 0.9rem; /* Ensure smaller font */
+}
+.activity-card-header p:first-child {
+  font-weight: bold; /* Make tag stand out a bit */
+  color: #005e3b;
+}
+.activity-duration {
+  /* This div contains activity.details */
+  margin-bottom: 8px; /* Space between details and challenge areas */
+}
+.activity-duration p {
+  margin: 0; /* Remove default paragraph margins */
+  font-size: 1rem; /* Make details prominent */
+  font-weight: 500;
+  color: #333;
 }
 .challenge-areas {
-  margin-top: 10px;
+  margin-top: auto; /* Push challenge areas to the bottom */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px; /* Space between badges */
 }
-.challenge-area-badge {
-  display: inline-block;
-  background-color: #e0f7fa;
-  color: #00796b;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  margin-right: 6px;
-  margin-bottom: 6px;
+.challenge-area-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 .card-actions {
   text-align: right;
@@ -100,10 +152,20 @@ const props = defineProps({
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
-  color: #e53935;
+  font-size: 1rem; /* Smaller delete button */
+  width: 28px; /* Fixed size */
+  height: 28px;
+  line-height: 1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8d7da; /* Light red background */
+  color: #721c24; /* Dark red text */
+  border: 1px solid #f5c6cb;
 }
 .action-btn:hover {
-  color: #b71c1c;
+  background-color: #f5c6cb;
+  color: #721c24;
 }
 </style>

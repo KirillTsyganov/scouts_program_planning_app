@@ -1,5 +1,6 @@
 <!--
   Docs:
+    [MODIFIED]
     ActivitiesList is a component of a ProgramEditor
     it displays a list of ActivityCards
 -->
@@ -28,11 +29,6 @@
 </template>
 <script setup>
 import ActivityCard from './ActivityCard.vue';
-import { useRouter, useRoute } from 'vue-router';
-
-const router = useRouter();
-// By using `useRoute`, we can access the current route's parameters.
-const route = useRoute();
 
 // The component should not load its own data.
 // Instead, it should define props to receive data from its parent.
@@ -45,40 +41,20 @@ const props = defineProps({
 });
 
 // Define the event that will be emitted to the parent to update the activities.
-const emit = defineEmits(['update:activities']);
+// Add 'add-new' and 'edit-activity' to the emitted events.
+const emit = defineEmits(['update:activities', 'add-new', 'edit-activity']);
 
 const addNewActivity = () => {
-  // Here is how you get the programId (parentId) from the route.
-  const programId = route.params.id;
-  const newActivity = {
-    id: 'new', // The editor will generate a real ID on save
-    duration: '',
-    details: '',
-    equipment: '',
-    tag: 'main',
-    challengeAreas: {
-      Community: false,
-      Outdoors: false,
-      Creative: false,
-      'Personal Growth': false,
-    },
-  };
-  router.push({
-    name: 'ActivityEditor',
-    params: { id: programId, activityId: 'new' },
-    state: { activity: newActivity },
-  });
+  // Emit an event to the parent component to handle the creation of a new activity.
+  emit('add-new');
 };
 
 const editActivity = (id) => {
-  const programId = route.params.id;
   const activityToEdit = props.activities.find((a) => a.id === id);
   if (activityToEdit) {
-    router.push({
-      name: 'ActivityEditor',
-      params: { id: programId, activityId: id },
-      state: { activity: activityToEdit },
-    });
+    // Emit an event to the parent component with the activity that needs to be edited.
+    // We pass a copy to prevent mutations of the original object until it's saved.
+    emit('edit-activity', { ...activityToEdit });
   }
 };
 
