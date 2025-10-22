@@ -1,6 +1,5 @@
 <!--
   Docs:
-    [MODIFIED]
     ActivitiesList is a component of a ProgramEditor
     it displays a list of ActivityCards
 -->

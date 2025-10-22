@@ -1,6 +1,5 @@
 <!--
  Docs:
-   [MODIFIED]
    ActivityEditor is a component for creating or updating an activity within a modal.
    It receives an activity object as a prop and emits events to save or cancel.
    It uses ActivityFramework as its layout blueprint.
@@ -95,13 +94,19 @@ const cancel = () => {
 
 <style scoped>
 .activity-editor-container {
-  padding: 20px;
+  padding: 1.25rem;
   background-color: #fff;
   border-radius: 8px;
-  width: 500px;
+  width: 90vw;
   max-width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+@media (min-width: 540px) {
+  .activity-editor-container {
+    width: 500px;
+  }
 }
 .editor-header {
   display: flex;

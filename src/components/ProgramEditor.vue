@@ -312,7 +312,7 @@ const printProgram = () => {
 }
 
 .program-editor {
-  padding: 16px;
+  padding: 1rem;
   max-width: 62.5rem; /* 1000px at 16px base font size */
   margin: 0 auto;
 }

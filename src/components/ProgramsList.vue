@@ -57,9 +57,14 @@ const deleteProgram = (id) => {
 
 <style scoped>
 .programs-container {
-  padding: 16px;
-  max-width: 900px; /* Constrain width for readability on desktop */
+  padding: 1rem;
   margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+  .programs-container {
+    max-width: 900px;
+  }
 }
 
 h1 {
