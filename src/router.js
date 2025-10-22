@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import ProgramsList from './components/ProgramsList.vue';
 import ProgramEditor from './components/ProgramEditor.vue';
 import ActivityEditor from './components/ActivityEditor.vue';
@@ -28,7 +28,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 
