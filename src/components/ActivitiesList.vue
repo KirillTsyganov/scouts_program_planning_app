@@ -93,3 +93,32 @@ const deleteActivity = (id) => {
   }
 };
 </script>
+<style scoped>
+.activities-list-container {
+  width: 100%;
+}
+
+.activities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.no-activities {
+  text-align: center;
+  color: #888;
+  padding: 2rem;
+  border: 2px dashed #444;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.add-activity-section {
+  text-align: center;
+}
+
+.add-activity-btn {
+  width: 100%;
+}
+</style>
