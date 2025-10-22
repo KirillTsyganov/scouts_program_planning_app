@@ -1,3 +1,7 @@
+<!--
+  Docs:
+    ProgramFramework is a blueprint for a program's general details including, title, date, patrol name and description
+ -->
 <template>
   <div class="program-framework">
     <div class="framework-header">

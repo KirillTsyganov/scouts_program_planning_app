@@ -1,3 +1,12 @@
+<!--
+ Docs:
+   ProgramEditor is a component for creating or updating a program. 
+   A new program should results in a ProgramCard.
+   A list of ProgramCards should appears on a ProgramsList
+   ProgramEditor page has two main child components:
+     - ProgramFramework (for general program details)
+     - ActivitiesList (for managing activities within the program)
+-->
 <template>
   <div class="program-template-container">
     <div class="template-header">
@@ -12,7 +21,7 @@
 
       <hr class="section-divider" />
 
-      <ActivityList v-model:activities="currentProgram.activities" />
+      <ActivitiesList v-model:activities="currentProgram.activities" />
     </main>
   </div>
 </template>
@@ -21,7 +30,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import ProgramFramework from './ProgramFramework.vue';
-import ActivityList from './ActivitiesList.vue';
+import ActivitiesList from './ActivitiesList.vue';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -37,7 +46,7 @@ const createNewProgramData = () => ({
   activities: [
     {
       id: 'opening',
-      duration: '10 mins',
+      duration: '10',
       details: 'Opening Parade',
       equipment: '',
       tag: 'opening',
@@ -50,7 +59,7 @@ const createNewProgramData = () => ({
     },
     {
       id: 'closing',
-      duration: '10 mins',
+      duration: '10',
       details: 'Closing Parade & Review',
       equipment: '',
       tag: 'closing',

@@ -120,7 +120,7 @@ const challengeAreaLogos = {
 const timeOptions = computed(() => {
   const options = [];
   for (let i = 5; i <= 120; i += 5) {
-    options.push(`${i} mins`);
+    options.push(`${i}`);
   }
   return options;
 });

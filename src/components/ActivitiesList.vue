@@ -1,35 +1,42 @@
+<!--
+  Docs:
+    ActivitiesList is a component of a ProgramEditor
+    it displays a list of ActivityCards
+-->
 <template>
-  <div class="activity-list">
-    <div class="activity-list-header">
-      <div class="time-col">Time</div>
-      <div class="activity-col">Activity</div>
-      <div class="activity-col">Equipment</div>
-      <div class="tag-col">Tag</div>
-      <div class="actions-col"></div>
-    </div>
-
-    <div class="activity-rows">
-      <ActivityFramework
-        v-for="(activity, index) in activities"
-        :key="activity.id || index"
+  <div class="activities-list-container">
+    <h2>Activities</h2>
+    <div v-if="activities.length" class="activities-list">
+      <ActivityCard
+        v-for="activity in activities"
+        :key="activity.id"
         :activity="activity"
-        :is-fixed-row="index === 0 || index === activities.length - 1"
-        @update:activity="updateActivity(index, $event)"
-        @remove="removeActivity(index)"
+        @edit="editActivity"
+        @delete="deleteActivity"
       />
     </div>
-
-    <div class="add-activity-container">
-      <button class="add-activity-btn" @click="addActivity">
-        + Add Activity
+    <p v-else class="no-activities">
+      No activities added yet. Click "Add New Activity" to start building your
+      program!
+    </p>
+    <div class="add-activity-section">
+      <button class="add-activity-btn" @click="addNewActivity">
+        + Add New Activity
       </button>
     </div>
   </div>
 </template>
-
 <script setup>
-import ActivityFramework from './ActivityFramework.vue';
+import ActivityCard from './ActivityCard.vue';
+import { useRouter, useRoute } from 'vue-router';
 
+const router = useRouter();
+// By using `useRoute`, we can access the current route's parameters.
+const route = useRoute();
+
+// The component should not load its own data.
+// Instead, it should define props to receive data from its parent.
+// The `v-model:activities` in ProgramEditor.vue passes this prop.
 const props = defineProps({
   activities: {
     type: Array,
@@ -37,77 +44,49 @@ const props = defineProps({
   },
 });
 
+// Define the event that will be emitted to the parent to update the activities.
 const emit = defineEmits(['update:activities']);
 
-const createNewActivity = () => ({
-  id: Date.now() + Math.random(),
-  duration: '',
-  details: '',
-  equipment: '',
-  tag: 'main',
-  challengeAreas: {
-    Community: false,
-    Outdoors: false,
-    Creative: false,
-    'Personal Growth': false,
-  },
-});
-
-const addActivity = () => {
-  const newActivities = [...props.activities];
-  console.log('Adding new activity');
-  console.log(newActivities);
-  // Insert before the last item (CLOSING)
-  newActivities.splice(newActivities.length - 1, 0, createNewActivity());
-  emit('update:activities', newActivities);
+const addNewActivity = () => {
+  // Here is how you get the programId (parentId) from the route.
+  const programId = route.params.id;
+  const newActivity = {
+    id: 'new', // The editor will generate a real ID on save
+    duration: '',
+    details: '',
+    equipment: '',
+    tag: 'main',
+    challengeAreas: {
+      Community: false,
+      Outdoors: false,
+      Creative: false,
+      'Personal Growth': false,
+    },
+  };
+  router.push({
+    name: 'ActivityEditor',
+    params: { id: programId, activityId: 'new' },
+    state: { activity: newActivity },
+  });
 };
 
-const removeActivity = (index) => {
-  const newActivities = [...props.activities];
-  newActivities.splice(index, 1);
-  emit('update:activities', newActivities);
+const editActivity = (id) => {
+  const programId = route.params.id;
+  const activityToEdit = props.activities.find((a) => a.id === id);
+  if (activityToEdit) {
+    router.push({
+      name: 'ActivityEditor',
+      params: { id: programId, activityId: id },
+      state: { activity: activityToEdit },
+    });
+  }
 };
 
-const updateActivity = (index, updatedActivity) => {
-  const newActivities = [...props.activities];
-  newActivities[index] = updatedActivity;
-  emit('update:activities', newActivities);
+const deleteActivity = (id) => {
+  if (confirm(`Are you sure you want to delete activity ID ${id}?`)) {
+    const updatedActivities = props.activities.filter((a) => a.id !== id);
+    // Emit an event to the parent to update the data, instead of modifying localStorage directly.
+    emit('update:activities', updatedActivities);
+  }
 };
 </script>
-
-<style scoped>
-.activity-list-header {
-  display: none; /* Hidden on mobile */
-  font-weight: bold;
-  background-color: #f2f2f2;
-  border: 1px solid #ddd;
-  border-bottom: 2px solid #005e3b;
-}
-
-.add-activity-container {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.add-activity-btn {
-  background-color: #005e3b;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-@media (min-width: 768px) {
-  .activity-list-header {
-    display: grid;
-    grid-template-columns: 100px 1fr 1fr 120px 40px;
-    gap: 10px;
-    padding: 8px 5px;
-  }
-  .activity-list-header .time-col {
-    padding-left: 15px;
-  }
-}
-</style>
